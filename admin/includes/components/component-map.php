@@ -47,7 +47,7 @@ class AesopMapComponentAdmin {
 					array(
 						'id' 	=> 'content',
 						'name' 	=> __('Marker Text', 'aesop-core'),
-						'type' 	=> 'text',
+						'type' 	=> 'textarea',
 						'cols'	=> 12
 					)
 				)
@@ -55,10 +55,10 @@ class AesopMapComponentAdmin {
 		);
 
 		$meta_boxes[] = array(
-			'title' => __('Map Component Locations', 'aesop-core'),
-			'pages' => 'post',
-			'context' => 'side',
-			'fields' => $opts
+			'title' 	=> __('Map Component Locations', 'aesop-core'),
+			'pages' 	=> apply_filters('aesop_map_meta_location','post'),
+			'context' 	=> 'side',
+			'fields' 	=> $opts
 		);
 
 		return $meta_boxes;

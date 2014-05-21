@@ -45,9 +45,20 @@ if (!function_exists('aesop_timeline_class_loader')){
 class AesopTimelineComponent {
 
 	function __construct(){
+
+		// call our method in the footer
 		add_action('wp_footer', array($this,'aesop_timeline_loader'),21);
-		add_action('aesop_inside_body_top', array($this,'draw_timeline'));
+
+		// add a body class if timeline is active
 		add_filter('body_class',		array($this,'body_class'));
+
+		// draw the timeline div, conditionally depending on version
+		if (AI_CORE_VERSION < '1.0.5') {
+			_deprecated_function( 'aesop_inside_body_top', '1.0.5', 'ase_theme_body_inside_top' );
+		} else {
+			add_action('ase_theme_body_inside_top', array($this,'draw_timeline')); // post 1.0.5
+		}
+
 	}
 
 	function aesop_timeline_loader(){
@@ -58,12 +69,15 @@ class AesopTimelineComponent {
 		// allow theme developers to determine the offset amount
 		$timelineOffset = apply_filters('aesop_timeline_scroll_offset', $offset );
 
+		// filterable content class
+		$contentClass = apply_filters('aesop_timeline_scroll_container', '.aesop-entry-content');
+
 		?>
 			<!-- Aesop Timeline -->
 			<script>
 			jQuery(document).ready(function(){
 
-				jQuery('.aesop-entry-content,.entry-content').scrollNav({
+				jQuery('<?php echo $contentClass;?>').scrollNav({
 				    sections: '.aesop-timeline-stop',
 				    arrowKeys: true,
 				    insertTarget: '.aesop-timeline',
